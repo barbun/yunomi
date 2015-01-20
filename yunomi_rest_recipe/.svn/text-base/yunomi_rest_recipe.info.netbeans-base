@@ -1,8 +1,0 @@
-name = Yunomi REST Recipe
-description = Custom module written for Recipes REST calls.
-package = Yunomi Services Layer
-core = 6.x
-php = 5.x
-dependencies[] = services
-dependencies[] = yunomi_rest_general
-dependencies[] = ll_recipe

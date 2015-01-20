@@ -1,5 +1,0 @@
-name = Yunomi REST Values
-description = Custom module written for REST calls values.
-package = Yunomi Services Layer
-core = 6.x
-php = 5.x
