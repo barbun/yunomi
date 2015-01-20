@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ *  Provides a generic but powerful API for web services.
+ */
+
+/**
+ * Implementation of hook_services_resources().
+ */
+function yunomi_rest_services_resources() {
+  
+
+  return $resources;
+}
+
+/**
+ * Check the access permission to a given views.
+ *
+ * @param $op
+ *  String. The operation that's going to be performed.
+ * @param $args
+ *  Array. The arguments that will be passed to the callback.
+ * @return
+ *  Boolean. TRUE if the user is allowed to load the given view.
+ */
+function _yunomi_rest_access($op = 'view', $args = array()) {
+  return TRUE;
+}

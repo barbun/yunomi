@@ -1,0 +1,7 @@
+name = Yunomi REST TestTell
+description = Custom module written for Test&Tell REST calls.
+package = Yunomi Services Layer
+core = 6.x
+php = 5.x
+dependencies[] = services
+dependencies[] = yunomi_rest_general

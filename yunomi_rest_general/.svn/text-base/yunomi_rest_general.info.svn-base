@@ -1,0 +1,9 @@
+name = Yunomi REST General
+description = Custom module written for general REST calls.
+package = Yunomi Services Layer
+core = 6.x
+php = 5.x
+dependencies[] = services
+dependencies[] = views
+dependencies[] = yunomi_rest_values
+dependencies[] = banner

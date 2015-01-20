@@ -1,0 +1,172 @@
+<?php
+/**
+ * @file
+ *  Provides a generic but powerful API for web services.
+ */
+
+include_once "yunomi_rest_general.inc";
+
+/**
+ * Implementation of hook_services_resources().
+ */
+function yunomi_rest_general_services_resources() {
+  $resources = array();
+  
+  // GET global settings.
+  $resources['settings'] = array();
+  $resources['settings']['index'] = array(
+    'help' => 'This method gets a list of all global settings.',
+    'file' => array(
+      'type' => 'inc',
+      'module' => 'yunomi_rest_general',
+      'name' => 'resources/yunomi_rest_general.resource',
+    ),
+    'callback' => '_yunomi_rest_general_settings_all',
+    'args' => array(
+      array(
+      'name' => 'page',
+      'optional' => TRUE,
+      'type' => 'int',
+      'description' => 'The zero-based index of the page to get, defaults to 0.',
+      'default value' => 0,
+      'source' => array('param' => 'page'),
+      ),
+    ),
+    'access arguments' => array('access content'),
+  );
+  
+  // GET list of labels.
+  $resources['labels'] = array();
+  $resources['labels']['index'] = array(
+    'help' => 'This method gets a list of all labels.',
+    'file' => array(
+      'type' => 'inc',
+      'module' => 'yunomi_rest_general',
+      'name' => 'resources/yunomi_rest_general.resource',
+    ),
+    'callback' => '_yunomi_rest_general_labels_all',
+    'args' => array(
+      array(
+      'name' => 'page',
+      'optional' => TRUE,
+      'type' => 'int',
+      'description' => 'The zero-based index of the page to get, defaults to 0.',
+      'default value' => 0,
+      'source' => array('param' => 'page'),
+      ),
+    ),
+    'access arguments' => array('access content'),
+  );
+  
+  // Get a list of banners.
+  $resources['banner'] = array();
+  $resources['banner']['retrieve'] = array(
+    'help' => 'This method retrieves banner list.',
+    'file' => array('type' => 'inc', 'module' => 'yunomi_rest_general', 'name' => 'resources/yunomi_rest_general.resource'),
+    'callback' => '_yunomi_rest_general_retrieve_banners',
+    'args' => array(
+      array(
+        'name' => 'op',
+        'optional' => FALSE,
+        'source' => array('path' => 0),
+        'type' => 'string',
+        'description' => 'The option for retrievement',
+      ),
+    ),
+    'access callback' => '_yunomi_rest_access',
+    'access arguments' => array('view'),
+    'access arguments append' => TRUE,
+  );
+  
+  // GET list of brands.
+  $resources['brands'] = array();
+  $resources['brands']['index'] = array(
+    'help' => 'This method gets a list of brands.',
+    'file' => array(
+      'type' => 'inc',
+      'module' => 'yunomi_rest_general',
+      'name' => 'resources/yunomi_rest_general.resource',
+    ),
+    'callback' => '_yunomi_rest_general_brands',
+    'args' => array(
+      array(
+      'name' => 'page',
+      'optional' => TRUE,
+      'type' => 'int',
+      'description' => 'The zero-based index of the page to get, defaults to 0.',
+      'default value' => 0,
+      'source' => array('param' => 'page'),
+      ),
+    ),
+    'access arguments' => array('access content'),
+  );
+  // Report an abuse.
+  $resources['abuse'] = array();
+  $resources['abuse']['create'] = array(
+    'help' => 'This method posts abuse report.',
+    'file' => array(
+      'type' => 'inc',
+      'module' => 'yunomi_rest_general',
+      'name' => 'resources/yunomi_rest_general.resource',
+    ),
+    'callback' => '_yunomi_rest_general_abuse_create',
+    'args' => array(
+      array(
+        'name' => 'nid',
+        'type' => 'array',
+        'description' => 'The id of the node to post abuse for.',
+        'source' => 'data',
+        'optional' => FALSE,
+      ),
+      array(
+        'name' => 'message',
+        'type' => 'array',
+        'description' => 'The message attached to the report.',
+        'source' => 'data',
+        'optional' => TRUE,
+      ),  
+    ),
+    'access arguments' => array('access content'),
+  );
+  // GET Taxonomy tree.
+  $resources['taxonomy'] = array();
+  $resources['taxonomy']['index'] = array(
+    'help' => 'This method gets a taxonomy tree.',
+    'file' => array(
+      'type' => 'inc',
+      'module' => 'yunomi_rest_general',
+      'name' => 'resources/yunomi_rest_general.resource',
+    ),
+    'callback' => '_yunomi_rest_general_taxonomy',
+    'access arguments' => array('access content'),
+  );
+  
+  return $resources;
+}
+
+
+/**
+ * Check the access permission.
+ *
+ * @param $op
+ *  String. The operation that's going to be performed.
+ * @param $args
+ *  Array. The arguments that will be passed to the callback.
+ * @return
+ *  Boolean. TRUE if the user is allowed to load the given resource.
+ */
+function _yunomi_rest_access($op = 'view', $args = array()) {
+  return TRUE;
+}
+
+
+/**
+ * Implementation of hook_theme()
+ */
+function yunomi_rest_general_theme() {
+  return array(
+    'yunomi_ll_recipe_product' => array(
+      'arguments' => array('ws_data' => NULL),
+    ),
+  );
+}

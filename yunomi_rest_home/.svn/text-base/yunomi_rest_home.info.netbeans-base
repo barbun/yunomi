@@ -1,0 +1,7 @@
+name = Yunomi REST Home
+description = Custom module written for mobile homepage REST calls.
+package = Yunomi Services Layer
+core = 6.x
+php = 5.x
+dependencies[] = services
+dependencies[] = yunomi_rest_general

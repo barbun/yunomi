@@ -1,0 +1,8 @@
+name = Yunomi REST Member
+description = Custom module written for member REST calls.
+package = Yunomi Services Layer
+core = 6.x
+php = 5.x
+dependencies[] = services
+dependencies[] = yunomi_rest_general
+dependencies[] = userinfos

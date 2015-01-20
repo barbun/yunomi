@@ -1,0 +1,349 @@
+<?php
+
+/**
+ * @file
+ *  Provides admin section for global settings to be passed in REST Call.
+ */
+
+/**
+ * Function to construct the array of labels.
+ */
+function list_all_labels() {
+  $labels = array();
+
+  $labels = array(
+      'menu.home' => 'Home',
+      'menu.sections' => 'Rubrieken',
+      'menu.test_and_tell' => '1 product, 1000 meningen',
+      'menu.contact' => 'Contact',
+      'menu.settings' => 'Instellingen',
+      'menu.login' => 'Login',
+      'menu.logout' => 'Logout',
+      'follow.title' => 'Volg ons op',
+      'follow.top	' => 'Top',
+      'footer.copyright' => 'Unilever 2012',
+      'footer.full_website' => 'Volledige website',
+      'footer.conditions' => 'Gebruikersvoorwaarden',
+      'footer.disclaimer' => 'Privacyverklaring',
+      'article.tab_general' => 'Algemeen',
+      'article.tab_articles' => 'Artikel',
+      'article.tab_reaction' => 'Reacties',
+      'article.tab_media' => 'Media',
+      'article.tab_share' => 'Delen',
+      'article.share' => 'Deel dit artikel',
+      'article.share_mail' => 'Via mail',
+      'article.share_facebook' => 'Facebook',
+      'article.share_hyves' => 'Hyves',
+      'article.written_by' => 'Geschreven door',
+      'homepage.by_you_for_you' => 'Door jullie, voor jullie',
+      'homepage.most_recent' => 'Meest recente',
+      'homepage.most_read' => 'Meest gelezen',
+      'homepage.outspoken' => 'Openhartig',
+      'homepage.recipes' => 'Recepten',
+      'homepage.battle' => 'Vraag van de week',
+      'homepage.item_by' => 'door',
+      'homepage.load_next' => 'Laad meer',
+      'homepage.loading' => 'Volgende artikels worden geladen',
+      'login.title' => 'Aanmelden',
+      'login.username' => 'Gebruikersnaam of e-mailadres',
+      'login.password' => 'Wachtwoord',
+      'login.remember' => 'Onthoud mij',
+      'login.login' => 'Inloggen',
+      'login.forgotten' => 'Paswoord vergeten?',
+      'login.not_registered	' => "Nog geen 'Mijn Yunomi' account?	",
+      'login.register' => 'Word ook lid',
+      'login.error_invalid_credentials' => 'The provided credentials are incorrect. Please try again.',
+      'forgotten.form_title' => 'Paswoord vergeten',
+      'forgotten.form_email' => 'Geef hier je e-mailadres op',
+      'forgetten.form_send_new_password' => 'Verstuur nieuw paswoord',
+      'forgotten.form_error_incorrect_email' => 'The provided e-mail address is incorrect',
+      'forgotten.form_error_unknown_email' => 'The provided e-mail address is unknown',
+      'forgotten.form_confirmed' => 'An e-mail containing a link to change your password has been sent to you.',
+      'forgotten.mail.subject' => 'Uw nieuw Yunomi paswoord',
+      'forgotten.mail.body' => 'Your password reset link:…',
+      'forgotten.success	' => "	U hebt net gebruik gemaakt van uw eenmalige login. Het is niet langer nodig om deze link te gebruiken om in te loggen. Gelieve nu uw paswoord aan te passen door 'Wijzig je paswoord' te selecteren bij je instellingen.	",
+      'change_password.title' => 'Wijzig uw paswoord',
+      'change_password.password' => 'Paswoord',
+      'change_password.confirm_password' => 'Paswoord bevestigen',
+      'change_password.change' => 'Wijzig paswoord',
+      'change_password.error_no_match' => 'The provided passwords do not match',
+      'change_password.success' => 'Your password was successfully changed.',
+      'change_password.title' => 'Wijzig uw paswoord',
+      'change_password.password' => 'Paswoord',
+      'change_password.confirm_password' => 'Paswoord bevestigen',
+      'change_password.change' => 'Wijzig paswoord',
+      'change_password.error_no_match' => 'The provided passwords do not match',
+      'change_password.success' => 'Your password was successfully changed.',
+      'sections.title' => 'Rubrieken',
+      'sections.themes	' => "	Thema's	",
+      'sections.brands' => 'Merken',
+      'articles.most_recent' => 'Meest recent',
+      'articles.most_reactions' => 'Meeste reacties',
+      'articles.most_read' => 'Meest gelezen',
+      'media.written_by' => 'Geschreven door',
+      'media.article' => 'Artikel',
+      'media.media' => 'Media',
+      'media.reacties' => 'Reacties',
+      'media.share' => 'Delen',
+      'media.add_picture' => 'Foto toevoegen',
+      'image.close' => 'Sluit',
+      'image.by' => 'door',
+      'image.share' => 'Delen',
+      'image.report_abuse' => 'Ongepast?',
+      'recipes.title' => 'Recepten',
+      'recipes.inspiration' => 'Inspiratie',
+      'recipes.most_read' => 'Meest gelezen',
+      'recipe.title' => 'Recepten',
+      'recipe.votes' => 'stemmen',
+      'recipe.written_by' => 'Geschreven door',
+      'recipe.preparation' => 'Bereiding',
+      'recipe.media' => 'Media',
+      'recipe.reactions' => 'Reacties',
+      'recipe.share' => 'Delen',
+      'ingredient.close' => 'Sluit',
+      'testtell.title' => 'Test & Tell',
+      'testtell.tested' => 'Getest',
+      'testtell.by_branch' => 'Per merk',
+      'testtell.how_to_test' => 'Hoe testen?',
+      'testtell.tab_about' => 'Over',
+      'testtell.tab_media' => 'Media',
+      'testtell.tab_opinions' => 'Meningen',
+      'testtell.tab_share' => 'Share',
+      'search_article.tab_by_name' => 'Zoek op naam',
+      'search_article.tab_filter' => 'Filter op',
+      'search_article.error' => 'Please enter at least 3 characters.',
+      'search_article.results_title' => 'Zoekresultaat',
+      'search_article.results_header_none' => 'Geen resultaten gevonden',
+      'search_article.results_header_one' => '1 resultaat gevonden',
+      'search_article.result_header_n' => '[N] resultaten gevonden',
+      'search_article.filter_theme' => 'Thema',
+      'search_article.filter_applications' => 'Toepassingen',
+      'search_article.filter_branch' => 'Merk',
+      'search_article.search' => 'Zoek',
+      'search_article.tab_by_name' => 'Zoek op naam',
+      'search_article.tab_filter' => 'Filter op',
+      'search_article.error' => 'Please enter at least 3 characters.',
+      'search_article.results_title' => 'Zoekresultaat',
+      'search_article.results_header_none' => 'Geen resultaten gevonden',
+      'search_article.results_header_one' => '1 resultaat gevonden',
+      'search_article.result_header_n' => '[N] resultaten gevonden',
+      'search_article.filter_theme' => 'Thema',
+      'search_article.filter_applications' => 'Toepassingen',
+      'search_article.filter_branch' => 'Merk',
+      'search_article.search' => 'Zoek',
+      'search_recipe.results_title' => 'Zoekresultaat',
+      'search_recipe.results_header_none' => 'Geen recepten gevonden',
+      'search_recipe.results_header_one' => '1 recept gevonden',
+      'search_recipe.results_header_n' => '[N] recepten gevonden',
+      'search_recipe.filter_moment' => 'Moment van de dag',
+      'search_recipe.filter_moment_all' => 'All',
+      'search_recipe.filter_moment_breakfast' => 'Breakfast',
+      'search_recipe.filter_moment_lunch' => 'Lunch',
+      'search_recipe.filter_moment_diner' => 'Dinner',
+      'search_recipe.filter_moment_snacks' => 'Snacks',
+      'search_recipe.filter_course' => 'Menugang',
+      'search_recipe.filter_course_all' => 'All',
+      'search_recipe.filter_course_apetizer' => 'Apetiser',
+      'search_recipe.filter_course_entree' => 'Entrée',
+      'search_recipe.filter_course_maincourse' => 'Main course',
+      'search_recipe.filter_course_dessert' => 'Dessert',
+      'search_recipe.filter_course_sidedish' => 'Side dish',
+      'search_recipe.filter_cooking_time' => 'Tijd',
+      'search_recipe.filter_cooking_time_all' => 'All',
+      'search_recipe.filter_cooking_time_0_15' => '0-15 minutes',
+      'search_recipe.filter_cooking_time_15_30' => '15-30 minutes',
+      'search_recipe.filter_cooking_time_30_60' => '30-60 minutes',
+      'search_recipe.filter_cooking_time_60-120' => '60-120 minutes',
+      'search_recipe.filter_cooking_time_120+' => '> 120 minutes',
+      'search_recipe.filter_dish' => 'Gerecht',
+      'search_recipe.filter_dish_all' => 'All',
+      'search_recipe.filter_dish_salad' => 'Salad',
+      'search_recipe.filter_dish_soup' => 'Soup',
+      'search_recipe.filter_dish_sauce' => 'Sauce and dressing',
+      'search_recipe.filter_dish_meat' => 'Meat',
+      'search_recipe.filter_dish_poultry' => 'Poultry',
+      'search_recipe.filter_dish_game' => 'Game',
+      'search_recipe.filter_dish_fish' => 'Fish and shellfish',
+      'search_recipe.filter_dish_egg' => 'Egg',
+      'search_recipe.filter_dish_dairy' => 'Dairy and cheese',
+      'search_recipe.filter_dish_vegetables' => 'Vegetables',
+      'search_recipe.filter_dish_potato' => 'Potato',
+      'search_recipe.filter_dish_pasta' => 'Pasta',
+      'search_recipe.filter_dish_rice' => 'Rice',
+      'search_recipe.filter_dish_dessert' => 'Dessert',
+      'search_recipe.filter_dish_iceandfruit' => 'Ice and fruit',
+      'search_recipe.filter_dish_pastry' => 'Pastry',
+      'search_recipe.filter_dish_chocolat' => 'Chocolat',
+      'search_recipe.filter_dish_bread' => 'Bread and sandwiches',
+      'search_recipe.filter_dish_beverages' => 'Beverages',
+      'search_recipe.filter_kitchen' => 'Keuken',
+      'search_recipe.filter_kitchen_all' => 'All',
+      'photo_upload.title' => 'Foto toevoegen',
+      'photo_upload.take_picture' => 'Neem een foto',
+      'photo_upload.load_picture' => 'Laad bestaande foto in',
+      'photo_upload.your_picture' => 'Je foto',
+      'photo_upload.photo_title' => 'Titel foto',
+      'photo_upload.photo_author' => 'Auteur',
+      'photo_upload.add_to_article' => 'Voeg toe aan artikel',
+      'photo_upload.confirm_message' => 'Ben je zeker dat je je foto wil toevoegen?',
+      'photo_upload.confirm_no' => 'Annuleer',
+      'photo_upload.confirm_yes' => 'Akkoord',
+      'reactions.place' => 'Plaats een reactie',
+      'reactions.header' => '[N] reacties',
+      'reactions.time' => '[12 january 2012] at [15:30]',
+      'reactions.form_title' => 'Plaats jouw reactie hier',
+      'reactions.form_close' => 'Sluit',
+      'reactions.form_reaction' => 'Reactie *',
+      'reactions.form_characters' => '[N] karakters over',
+      'reactions.form_required' => '* Verplicht',
+      'reactions.form_post' => 'Reactie plaatsen',
+      'reactions.form_error' => 'Please provide us with your reaction',
+      'reactions.form_share' => 'Deel deze reactie op',
+      'rate.title' => 'Geef je waardering',
+      'rate.close' => 'Sluit',
+      'rate.confirm' => 'Bevestig',
+      'rate.error' => 'Please rate this recipe with 1 or more stars',
+      'reviews.post_opinion' => 'Laat jouw mening achter',
+      'reviews.header' => '[N] meningen',
+      'reviews.form_title' => 'Deel ook jouw mening',
+      'reviews.form_close' => 'Sluit',
+      'reviews.form_question_a' => 'Wat is je totaaloordeel over dit product?',
+      'reviews.form_question_b' => 'In welke mate heeft het aan je verwachting voldaan?',
+      'reviews.form_question_c' => 'Hoe waarschijnlijk ga je dit product in de winkel kopen?',
+      'reviews.form_question_d	' => "Hoe waarschijnlijk ga je dit product aanbevelen aan vrienden, familie of collega's?	",
+      'reviews.form_question_e' => 'Wat moeten Yunomi leden nog weten over dit product?',
+      'reviews.form_reaction' => 'Reactie *',
+      'reviews.form_characters' => '[N] characters left',
+      'reviews.form_mandatory' => '* Verplicht',
+      'reviews.form_your_name' => 'Jouw naam',
+      'reviews.form_post' => 'Mening toevoegen',
+      'reviews.form_error' => 'Please fill in all mandatory fields.',
+      'settings.title' => '<Instellingen',
+      'settings.language' => 'Kies uw taal',
+      'settings.dutch' => 'Nederlands',
+      'settings.frans' => 'Frans',
+      'settings.change_password' => 'Wijzig hier je paswoord',
+      'settings.manage_email' => 'Beheer je e-mail adres',
+      'change_email.title' => 'Wijzig je e-mailadres',
+      'change_email.body' => 'Je staat met dit e-mailadres geregistreerd:',
+      'change_email.new_email' => 'Nieuw e-mailadres',
+      'change_mail.confirm_email' => 'Nieuw e-mailadres bevestigen',
+      'change_mail.error_invalid_email' => 'Please provide a valid e-mail address',
+      'change_mail.error_no_match' => 'Provided e-mailaddress did not match',
+      'other.conditions' => '[Tekst gebruiksvoorwaarden]',
+      'other.disclaimer' => '[Tekst privacy voorwaarden]',
+      'other.login_required' => 'U moet ingelogd zijn om verder te gaan',
+  );
+
+  return $labels;
+}
+
+function yunomi_rest_values_init() {
+  global $conf; // global configuration variables table
+  if (!isset($conf['i18n_variables'])) {
+    $conf['i18n_variables'] = array();
+  }
+  
+  $labels = list_all_labels();
+  foreach ($labels as $key => $label) {
+    array_push($conf['i18n_variables'], 'yunomi_' . $key);
+  }
+  
+  $settings = array(
+    'terms_and_conditions',
+    'privacy_statement',
+    'facebook_url',
+    'twiter_url',
+  );
+  foreach ($settings as $key => $set) {
+    array_push($conf['i18n_variables'], 'yunomi_' . $set);
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function yunomi_rest_values_menu() {
+  $items = array();
+
+  $items['admin/settings/yunomi_rest_values'] = array(
+      'title' => 'Yunomi configuration',
+      'description' => 'These settings will be passed to Mobile App once they are requested via Services.',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('yunomi_rest_values_settings_form'),
+      'access arguments' => array('administer site configuration'),
+  );
+  $items['admin/settings/yunomi_rest_values/settings'] = array(
+      'title' => 'Settings',
+      'description' => 'Global settings to be passed to the Mobile App by request.',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('yunomi_values_settings_form'),
+      'access arguments' => array('administer site configuration'),
+      'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+  $items['admin/settings/yunomi_rest_values/labels'] = array(
+      'title' => 'Labels',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('yunomi_rest_values_labels_form'),
+      'access arguments' => array('administer site configuration'),
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 10,
+  );
+
+  return $items;
+}
+
+function yunomi_rest_values_settings_form() {
+  $form = array();
+
+  $form['settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Settings',
+      '#description' => t('These are the Global settings Mobile App may need.'),
+  );
+  $form['settings']['yunomi_terms_and_conditions'] = array(
+      '#type' => 'textfield',
+      '#title' => t('TermsAndConditions'),
+      '#default_value' => variable_get('yunomi_terms_and_conditions', ''),
+  );
+  
+  $form['settings']['yunomi_privacy_statement'] = array(
+      '#type' => 'textfield',
+      '#title' => t('PrivacyStatement'),
+      '#default_value' => variable_get('yunomi_privacy_statement', ''),
+  );
+  
+  $form['settings']['yunomi_facebook_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Facebook_URL'),
+      '#default_value' => variable_get('yunomi_facebook_url', ''),
+  );
+  $form['settings']['yunomi_twiter_url'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Twitter_URL'),
+      '#default_value' => variable_get('yunomi_twiter_url', ''),
+  );
+
+  return system_settings_form($form);
+}
+
+function yunomi_rest_values_labels_form() {
+  $form = array();
+
+  $form['labels'] = array(
+      '#type' => 'fieldset',
+      '#title' => 'Labels',
+      '#description' => t('These are the names for labels that are going to be used in Mobile App.'),
+  );
+  $labels = list_all_labels();
+  foreach ($labels as $key => $label) {
+    $form['labels']['yunomi_' . $key] = array(
+      '#type' => 'textfield',
+      '#title' => $key,
+      '#default_value' => variable_get('yunomi_' . $key, $label),
+    );
+  }
+  
+  return system_settings_form($form);
+}

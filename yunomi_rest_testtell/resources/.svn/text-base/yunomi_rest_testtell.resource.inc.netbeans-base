@@ -1,0 +1,157 @@
+<?php
+/**
+* @file
+* Callbacks for services module resource hooks.
+*/
+
+/**
+ * Returns the formatted results of a node_load() for the specified node.
+ *
+ * @param $nid
+ *   NID of the node we want to return.
+ * @return
+ *   Formatted node object array or FALSE if not found.
+ *
+ * @see node_load()
+ */
+function _yunomi_rest_testtell_retrieve($arg) {
+  $result = array();
+  
+  if ($arg == "brands") {
+    $result = _yunomi_rest_testtell_brands();
+  }
+  else {
+    $node = node_load($arg);
+    if (!$node && $node->type !== 'test_tell') {
+      return services_error( t('No results found'), 404);
+    }
+    $node->rating = votingapi_select_single_result_value(array('content_type' => 'node', 'content_id' => $node->nid, 'tag' => 'average', ));
+    $node->questions = testandtell_get_questions($node->nid);
+    $result = _yunomi_rest_format_testtells($node);
+  }
+  
+  return $result;
+}
+
+/**
+ * Returns the comments of a specified node.
+ *
+ * @param $nid
+ *   Unique identifier for the node.
+ * @param $count
+ *   Number of comments to return.
+ * @param $start
+ *   Which comment to start with. if present, $start and $count are used together
+ *   to create a LIMIT clause for selecting comments. This could be used to do paging.
+ * @return
+ *   An array of comment objects.
+ */
+function _yunomi_rest_testtell_resource_load_node_comments($nid, $count = 0, $start = 0) {
+  $comments = array();
+  $limit = ((int)$count > 0 ? ' LIMIT ' . (int)$start . ', ' . (int)$count . ' ' : '');
+  $result = db_query("SELECT a.cid, a.pid, a.comment, a.name, a.uid, b.created, b.picture FROM {comments} as a INNER JOIN {users} as b ON b.uid = a.uid WHERE a.nid = %d AND a.status = %d ORDER BY a.thread DESC" . $limit, $nid, COMMENT_PUBLISHED);
+  $votes = testandtell_get_useraverages($nid);
+  
+  while ($comment = db_fetch_array($result)) {
+    $comment['rating'] = 0;
+    
+    if(isset($votes[$comment['uid']])) {
+      $comment['rating'] = $votes[$comment['uid']];
+    }
+    
+    $comments[] = array(
+      'cid' => $comment['cid'],
+      'parent' => $comment['pid'],
+      'comment' => $comment['comment'],
+      'rating' => ceil($comment['rating']),  
+      'author' => $comment['name'],
+      'picture' =>  $comment['picture'],
+      'created' => $comment['created'],  
+    );    
+  }
+  //  TODO Add default user pic if doesn't exist
+  return $comments;
+}
+
+/**
+ * Returns the list of brands which have test and tells.
+ * 
+ * @return
+ *   An array of comment objects.
+ */
+function _yunomi_rest_testtell_brands() {
+  $result = array();
+  
+  // Do a custom DB query.
+  $sql = "SELECT tdata.name FROM {node} node";
+  $sql .= " INNER JOIN  {term_node} term ON node.nid = term.nid";
+  $sql .= " INNER JOIN  {term_data} tdata ON term.tid = tdata.tid";
+  $sql .= " WHERE node.type =  'test_tell'";
+  $sql .= " AND tdata.vid =16";
+  $sql .= " GROUP BY tdata.tid";
+  $db_result = db_query($sql);
+  
+  while ($res = db_fetch_array($db_result)) {
+      $result[_yunomi_rest_brands_checkterm($res['name'])] = $res['name'];
+    }
+  
+  return $result;
+}
+
+/**
+ * Callback for posting comment to testtell node.
+ *
+ * @return
+ * Formatted array or FALSE if not found.
+ */
+function _yunomi_rest_testtell_resource_post_comment($nid, $comment) {
+  // Check if there's such a node.
+  $sql = "SELECT count(*) FROM {node} WHERE nid = %d";
+  $count = db_result(db_query($sql, $nid));
+  if ($count == 0) {
+    return services_error( t('Node does not exist.'), 404);
+  }
+  // Adds backwards compatability with regression fixed in #1083242
+  $comment = _services_arg_value($comment, 'comment');
+  $comment['nid'] = $nid;
+  if (empty($comment['nid'])) {
+    return services_error( t('A nid must be provided'), 406);
+  }
+  
+  // Setup form_state
+  $form_state = array();
+  $form_state['values'] = $comment;
+  $form_state['values']['op'] = variable_get('services_comment_save_button_resource_create', t('Save'));
+
+  $comment_empty = array(
+    'nid' => $comment['nid'],
+    'cid' => NULL,
+  );
+
+  if (!empty($comment['pid'])) {
+    $comment_empty['pid'] = $comment['pid'];
+  }
+  
+  global $user;
+  $vote = votingapi_select_votes(array('content_type' => 'node', 'content_id' => $nid, 'uid' => $user->uid, 'tag' => 'average', ));
+  if (count($vote) > 0) {
+      return services_error( t('You have already voted and commented this.'), 406);
+  }
+  
+  $ret = drupal_execute('testandtell_form', $form_state, $comment_empty);
+  
+  if ($errors = form_get_errors()) {
+    return services_error(implode(" ", $errors), 406, array('form_errors' => $errors));
+  }
+
+  // Load latest created comment.
+  $recent_comments = comment_get_recent(1);
+  $cid = $recent_comments[0]->cid;
+
+  return array(
+    'cid' => $cid,
+    'uri' => services_resource_uri(array('comment', $cid)),
+  );
+
+  return $comment;
+}

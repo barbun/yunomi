@@ -1,0 +1,160 @@
+<?php
+/**
+ * @file
+ *  Provides a generic but powerful API for web services.
+ */
+
+/**
+ * Implementation of hook_services_resources().
+ */
+function yunomi_rest_testtell_services_resources() {
+  $resources = array();
+  
+  // GET Recent articles resources.
+  $resources['testtells'] = array();
+  $resources['testtells']['index'] = array(
+    'help' => 'This method retrieves a list of testtells.',
+    'file' => array(
+      'type' => 'inc',
+      'module' => 'yunomi_rest_testtell',
+      'name' => 'resources/yunomi_rest_testtells.resource',
+    ),
+    'callback' => '_yunomi_rest_testtells',
+    'access callback' => '_yunomi_rest_access',
+    'access arguments' => array('view'),
+    'access arguments append' => TRUE,
+    'args' => array(
+      array(
+      'name' => 'brand',
+      'optional' => TRUE,
+      'type' => 'string',
+      'description' => 'The zero-based index of the page to get, defaults to 0.',
+      'default value' => 0,
+      'source' => array('param' => 'brand'),
+      ),
+    ),
+  );
+  // Get Test&Tell node with a specified ID.
+  $resources['testtell'] = array();
+  $resources['testtell']['retrieve'] = array(
+    'help' => 'This method retrieves a specified test&tell by id.',
+    'file' => array('type' => 'inc', 'module' => 'yunomi_rest_testtell', 'name' => 'resources/yunomi_rest_testtell.resource'),
+    'callback' => '_yunomi_rest_testtell_retrieve',
+    'args' => array(
+      array(
+        'name' => 'nid',
+        'optional' => FALSE,
+        'source' => array('path' => 0),
+        'type' => 'int',
+        'description' => 'The nid of the test&tell to get',
+      ),
+    ),
+    'access callback' => '_yunomi_rest_access',
+    'access arguments' => array('view'),
+    'access arguments append' => TRUE,
+  );
+  $resources['testtell']['targeted_actions'] = array(
+    'comment' => array(
+      'help' => 'This method posts the comment for a given node',
+      'file' => array('type' => 'inc', 'module' => 'yunomi_rest_testtell', 'name' => 'resources/yunomi_rest_testtell.resource'),
+      'access callback' => 'user_access',
+      'access arguments' => array('post comments'),
+      'callback' => '_yunomi_rest_testtell_resource_post_comment',
+      'args' => array(
+        array(
+         'name' => 'nid',
+         'optional' => FALSE,
+         'source' => array('path' => 0),
+         'type' => 'int',
+         'description' => 'The id of the Node for which we post a comment.',
+        ),
+        array(
+        'name' => 'data',
+        'type' => 'array',
+        'description' => 'The comment data.',
+        'source' => 'data',
+        'optional' => FALSE,
+        ),
+      ),
+    ),
+    'media' => array(
+      'help' => 'This method does request to post a new media for a given node',
+      'file' => array('type' => 'inc', 'module' => 'yunomi_rest_testtell', 'name' => 'resources/yunomi_rest_testtell.resource'),
+      'access callback' => '_yunomi_rest_access',
+      'access arguments' => array('view'),
+      'access arguments append' => TRUE,
+      'callback' => '_yunomi_rest_testtell_resource_post_media',
+      'args' => array(
+        array(
+         'name' => 'nid',
+         'optional' => FALSE,
+         'source' => array('path' => 0),
+         'type' => 'int',
+         'description' => 'The id of the Node for which we post a media.',
+        ),
+        array(
+        'name' => 'data',
+        'type' => 'array',
+        'description' => 'The media data.',
+        'source' => 'data',
+        'optional' => FALSE,
+        ),
+      ),
+    ),    
+  );
+  $resources['testtell']['relationships'] = array(
+    'medias' => array(
+      'file' => array('type' => 'inc', 'module' => 'yunomi_rest_testtell', 'name' => 'resources/yunomi_rest_testtell.resource'),
+      'help'   => t('This method returns medias associated with a node.'),
+      'access callback' => '_yunomi_rest_access',
+      'access arguments' => array('view'),
+      'access arguments append' => TRUE,
+      'callback' => '_yunomi_rest_testtell_resource_load_media',
+      'args'     => array(
+        array(
+          'name' => 'nid',
+          'optional' => FALSE,
+          'source' => array('path' => 0),
+          'type' => 'int',
+          'description' => 'The nid of the node whose medias we are getting',
+        ),
+      ),
+    ),
+  );
+  if (module_exists('comment')) {
+    $comments = array(
+        'file' => array('type' => 'inc', 'module' => 'yunomi_rest_testtell', 'name' => 'resources/yunomi_rest_testtell.resource'),
+        'help' => t('This method returns comments from a given node.'),
+        'access callback' => 'user_access',
+        'access arguments' => array('access comments'),
+        'access arguments append' => FALSE,
+        'callback' => '_yunomi_rest_testtell_resource_load_node_comments',
+        'args' => array(
+            array(
+                'name' => 'nid',
+                'type' => 'int',
+                'description' => t('The node id to load comments for.'),
+                'source' => array('path' => 0),
+                'optional' => FALSE,
+            ),
+            array(
+                'name' => 'count',
+                'type' => 'int',
+                'description' => t('Number of comments to load.'),
+                'source' => array('param' => 'count'),
+                'optional' => TRUE,
+            ),
+            array(
+                'name' => 'offset',
+                'type' => 'int',
+                'description' => t('If count is set to non-zero value, you can pass also non-zero value for start. For example to get comments from 5 to 15, pass count=10 and start=5.'),
+                'source' => array('param' => 'offset'),
+                'optional' => TRUE,
+            ),
+        ),
+    );
+    $resources['testtell']['relationships']['comments'] = $comments;
+  }
+  
+  return $resources;
+}
